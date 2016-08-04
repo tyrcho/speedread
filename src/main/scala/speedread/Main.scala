@@ -18,17 +18,20 @@ object Main extends SimpleSwingApplication {
 
   val stream = getClass.getResourceAsStream("/text.txt")
   val text = io.Source.fromInputStream(stream).getLines
-  val words = text.flatMap(_.split(" "))
+  val words = text.flatMap(_.split(" ")).toVector
+  var pos = 0
 
   val timer = new Timer
 
   val task = new TimerTask {
     override def run =
-      if (words.hasNext)
-        update(words.next)
+      if (words.size > pos) {
+        update(words(pos))
+        pos += 1
+      }
   }
 
-  timer.scheduleAtFixedRate(task, 10, 10)
+  timer.scheduleAtFixedRate(task, 200, 200)
 
   def update(word: String) = {
     Swing.onEDT {
