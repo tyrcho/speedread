@@ -1,18 +1,50 @@
 package speedread
 
 import scala.swing._
+import GridBagPanel._
 import java.util.Timer
 import java.util.TimerTask
 import scala.swing.event._
+import javax.swing.Box
 
 object Main extends SimpleSwingApplication {
   var pos = 0
   var speed = 200
 
-  val label = new Label {
-    text = "long word blah"
-    minimumSize = new Dimension(300, 100)
-    horizontalAlignment = Alignment.Center
+  val wordLeft = new Label {
+    horizontalAlignment = Alignment.Right
+  }
+  val wordMid = new Label(" ")
+  val wordRight = new Label {
+    horizontalAlignment = Alignment.Left
+  }
+
+  val wordPanel = new GridBagPanel {
+    val c = new Constraints
+    c.fill = Fill.None
+    c.gridy = 0
+    c.gridx = 0
+    layout(new Label("                ")) = c
+    c.gridx = 1
+    layout(new Label("|")) = c
+    c.gridx = 2
+    layout(new Label("                ")) = c
+
+    c.gridy = 1
+    c.gridx = 0
+    c.anchor = Anchor.East
+    layout(wordLeft) = c
+    c.gridx = 1
+    layout(wordMid) = c
+    c.gridx = 2
+    c.anchor = Anchor.West
+    layout(wordRight) = c
+    c.anchor = Anchor.Center
+
+    c.gridy = 2
+    c.gridx = 1
+    layout(new Label("|")) = c
+
   }
 
   val speedLabel = new Label {
@@ -22,7 +54,7 @@ object Main extends SimpleSwingApplication {
   val top = new MainFrame {
     title = "Speed Read"
     contents = new BorderPanel {
-      add(label, BorderPanel.Position.North)
+      add(wordPanel, BorderPanel.Position.North)
       add(speedLabel, BorderPanel.Position.South)
 
       listenTo(keys)
@@ -73,8 +105,15 @@ object Main extends SimpleSwingApplication {
 
   def update(word: String) = {
     Swing.onEDT {
-      Thread.sleep(10)
-      label.text = word
+      val (l, m, r) = split(word)
+      wordLeft.text = l
+      wordMid.text = m
+      wordRight.text = r
     }
+  }
+
+  def split(word: String) = {
+    val pos = ((word.length + 1) * 0.4).toInt - 1
+    (word.take(pos), word.drop(pos).take(1), word.drop(pos + 1))
   }
 }
