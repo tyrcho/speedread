@@ -50,16 +50,19 @@ object Main extends SimpleSwingApplication {
   val stream = getClass.getResourceAsStream("/text.txt")
   val text = io.Source.fromInputStream(stream).getLines
   val words = text.flatMap(_.split(" ")).toVector
+  val avgLength = words.map(_.length).sum / words.length
 
   val timer = new Timer
 
   def task: TimerTask = new TimerTask {
     override def run = {
       if (words.size > pos) {
-        update(words(pos))
+        val w = words(pos)
+        update(w)
         pos += 1
+        val duration = w.length * 60000 / speed / avgLength
+        timer.schedule(task, duration)
       }
-      timer.schedule(task, 60000 / speed)
     }
   }
 
