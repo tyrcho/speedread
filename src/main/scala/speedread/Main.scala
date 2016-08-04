@@ -8,14 +8,12 @@ object Main extends SimpleSwingApplication {
   val label = new Label {
     text = "long word blah"
     minimumSize = new Dimension(300, 100)
-    verticalAlignment = Alignment.Center
+    horizontalAlignment = Alignment.Center
   }
 
   val top = new MainFrame {
     title = "Speed Read"
-    contents = new BoxPanel(Orientation.Vertical) {
-      contents += label
-    }
+    contents = label
   }
 
   val stream = getClass.getResourceAsStream("/text.txt")
