@@ -60,8 +60,11 @@ object Main extends SimpleSwingApplication {
         val w = words(pos)
         update(w)
         pos += 1
-        val duration = w.length * 60000 / speed / avgLength
-        timer.schedule(task, duration)
+        val specialChar = w.exists(!_.isLetter)
+        val size = if (specialChar) w.length max avgLength else w.length
+        val duration = size * 60000 / speed / avgLength
+        val dur = if (specialChar) 2 * duration else duration
+        timer.schedule(task, dur)
       }
     }
   }
