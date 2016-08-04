@@ -6,17 +6,23 @@ import java.util.Timer
 import java.util.TimerTask
 import scala.swing.event._
 import javax.swing.Box
+import java.awt.Color
 
 object Main extends SimpleSwingApplication {
   var pos = 0
   var speed = 200
 
-  val wordLeft = new Label {
+  val wordLeft = new Label(" ") {
     horizontalAlignment = Alignment.Right
+    font = new Font("Arial", 0, 24)
   }
-  val wordMid = new Label(" ")
-  val wordRight = new Label {
+  val wordMid = new Label(" ") {
+    font = new Font("Arial", 0, 24)
+    foreground = Color.MAGENTA
+  }
+  val wordRight = new Label(" ") {
     horizontalAlignment = Alignment.Left
+    font = new Font("Arial", 0, 24)
   }
 
   val wordPanel = new GridBagPanel {
@@ -24,11 +30,11 @@ object Main extends SimpleSwingApplication {
     c.fill = Fill.None
     c.gridy = 0
     c.gridx = 0
-    layout(new Label("                ")) = c
+    layout(Swing.HStrut(200)) = c
     c.gridx = 1
     layout(new Label("|")) = c
     c.gridx = 2
-    layout(new Label("                ")) = c
+    layout(Swing.HStrut(200)) = c
 
     c.gridy = 1
     c.gridx = 0
